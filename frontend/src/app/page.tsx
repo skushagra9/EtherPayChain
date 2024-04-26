@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { contractAbi } from "./abi";
 import { GitHubLogoIcon, TwitterLogoIcon, EnvelopeClosedIcon } from "@radix-ui/react-icons";
 import Web3 from "web3";
-import Link from "next/link";
+import { Admin } from "./admin";
 
 export default function Home() {
   const [web3, setWeb3] = useState(null);
@@ -12,6 +12,7 @@ export default function Home() {
   const contractAddress = '0x95D2d8e7EB936638be0c383f5FDC0b3788A2257D';
   const [email, setEmail] = useState("");
   const [transaction, setTransaction] = useState("");
+  const [option, setOption] = useState(false);
 
   useEffect(() => {
     if (window.ethereum) {
@@ -89,21 +90,18 @@ export default function Home() {
             </button>
           </div>
         </form>
-        <Link
-          href={{
-            pathname: '/all',
-          }}
-        >
-          <button
-            className="bg-gray-50 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >Admin Dashboard
-          </button>
-        </Link>
+        <button
+          onClick={() => setOption(!option)}
+          className="bg-gray-50 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >Admin Dashboard
+        </button>
       </div>
+      {option && <Admin web3={web3} courseContract={courseContract} />}
       <div className="mb-32 grid text-center lg:mb-0 lg:w-full lg:max-w-5xl tracking-tight font-semibold">
         Seamlessly connect any app to Ethereum&apos;s chain for smooth cryptocurrency payments
         {transaction && <span className="text-green-400">Transaction Successful, Hash - {transaction}</span>
-        }      </div>
+        }
+      </div>
     </main>
   );
 }
